@@ -1,8 +1,19 @@
 require('dotenv').config()
 const axios = require('axios');
-var express = require('express')
-var app = express()
-var port = 3000
+var express = require('express');
+var app = express();
+var port = 3000;
+var fs = require("firebase-admin");
+
+
+
+const serviceAccount = require('./admin-key/shuttler-23bfb-1a6fc3c068f5.json');
+
+fs.initializeApp({
+  credential: fs.credential.cert(serviceAccount)
+});
+const db = fs.firestore();
+const shuttlesdb = db.collection('shuttles');
 let config = {
   headers: {
     Authorization: 'Bearer sk_test_fda84a0251f0521e87cea8b0a675ccd4d6c74269',
@@ -16,8 +27,10 @@ let params = JSON.stringify({
   
 })
 // respond with "hello world" when a GET request sis made to the homepage
-app.get('/', function (req, res) {
-  return res.send(process.env.PORT)
+app.get('/:tagId',async function  (req, res)  {
+  console.log(req.params);
+  await shuttlesdb.doc("shuttle").set(req.params);
+  return res.send(req.params);
   // axios.post('https://api.paystack.co/transaction/initialize', params, config)
   // .then(feedback => {
   //   // console.log(`statusCode: ${res.statusCode}`)
@@ -31,7 +44,7 @@ app.get('/', function (req, res) {
 })
 
 app.post('/callback', (req, res) => {
-  console.log(req.body)
+  console.log(req.params)
   return res.end()
 })
 
