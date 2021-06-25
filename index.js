@@ -48,6 +48,11 @@ app.post('/callback', (req, res) => {
   return res.end()
 })
 
+app.get('/', (req, res) => {
+  // console.log(req.params)
+  return res.send(true);
+})
+
 
 app.listen(process.env.PORT, () => {
     console.log(`Loading api listening at http://localhost:${port}`)
