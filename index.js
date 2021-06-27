@@ -50,7 +50,7 @@ app.post('/callback', (req, res) => {
 
 app.get('/', (req, res) => {
   // console.log(req.params)
-  return res.send(true);
+  return res.send(false);
 })
 
 
