@@ -14,6 +14,7 @@ fs.initializeApp({
 });
 const db = fs.firestore();
 const shuttlesdb = db.collection('shuttles');
+const triggerdb = db.collection('triggers');
 let config = {
   headers: {
     Authorization: 'Bearer sk_test_fda84a0251f0521e87cea8b0a675ccd4d6c74269',
@@ -27,7 +28,7 @@ let params = JSON.stringify({
   
 })
 // respond with "hello world" when a GET request sis made to the homepage
-app.get('/:tagId',async function  (req, res)  {
+app.get('/tag/:tagId',async function  (req, res)  {
   console.log(req.params);
   await shuttlesdb.doc("shuttle").set(req.params);
   return res.send(req.params);
@@ -48,8 +49,16 @@ app.post('/callback', (req, res) => {
   return res.end()
 })
 
-app.get('/', (req, res) => {
-  // console.log(req.params)
+app.get('/trigger/:busId', async function (req, res) {
+  await triggerdb.doc(req.params.busId).update({
+    "trigger": true
+  })
+  console.log(req.params)
+  setTimeout(async function(){
+    await triggerdb.doc(req.params.busId).update({
+      "trigger": false
+    })
+  }, 10000);     
   return res.send(false);
 })
 
