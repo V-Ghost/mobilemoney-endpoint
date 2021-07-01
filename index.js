@@ -50,16 +50,10 @@ app.post('/callback', (req, res) => {
 })
 
 app.get('/trigger/:busId', async function (req, res) {
-  await triggerdb.doc(req.params.busId).update({
-    "trigger": true
-  })
-  console.log(req.params)
-  setTimeout(async function(){
-    await triggerdb.doc(req.params.busId).update({
-      "trigger": false
-    })
-  }, 10000);     
-  return res.send(false);
+  var trigger = await triggerdb.doc(req.params.busId).get();
+   //console.log(trigger.data()["trigger"]);
+  
+  return res.send(trigger.data()["trigger"]);
 })
 
 
