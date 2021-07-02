@@ -30,7 +30,7 @@ let params = JSON.stringify({
 // respond with "hello world" when a GET request sis made to the homepage
 app.get('/tag/:tagId',async function  (req, res)  {
   console.log(req.params);
-  await shuttlesdb.doc("shuttle").set(req.params);
+  await shuttlesdb.doc("tags").set(req.params);
   return res.send(req.params);
   // axios.post('https://api.paystack.co/transaction/initialize', params, config)
   // .then(feedback => {
