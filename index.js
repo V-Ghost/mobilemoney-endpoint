@@ -8,7 +8,9 @@ var fs = require("firebase-admin");
 
 
 const serviceAccount = require('./admin-key/shuttler-23bfb-1a6fc3c068f5.json');
-
+  function print(text){
+   console.log(text);
+  }
 fs.initializeApp({
   credential: fs.credential.cert(serviceAccount)
 });
@@ -27,21 +29,52 @@ let params = JSON.stringify({
   "amount": "20000",
   
 })
-// respond with "hello world" when a GET request sis made to the homepage
+
 app.get('/tag/:tagId',async function  (req, res)  {
-  console.log(req.params);
-  await db.collection('nfc').doc("tags").set(req.params);
+  var userId ;
+
+  var result = await db.collection("shuttleUsers").where('tagId', '==', req.params.tagId).get();
+
+  if(result.docs.length > 0){
+    result.docs.forEach(element => {
+      print(element.id)
+      userId = element.id;
+    });
+    var bookedTrips = await db.collection("trips").where('status', '==', 'booked').where('user', '==', userId).get();
+    var ongoingTrips = await db.collection("trips").where('status', '==', 'ongoing').where('user', '==', userId).get();
+
+    var tripId ;
+    if(bookedTrips.docs.length>0){
+      bookedTrips.docs.forEach(element =>{
+        print("reach")
+        print(element.id);
+      tripId = element.id;
+      });
+      await db.collection("trips").doc(tripId).update({
+        "status": 'ongoing',
+      });
+
+      
+
+    }
+
+    if(ongoingTrips.docs.length>0){
+      ongoingTrips.docs.forEach(element =>{
+      tripId = element.id;
+      });
+      await db.collection("trips").doc(tripId).update({
+        "status": 'expired',
+      });
+
+      
+
+    }
+  }
+ 
+  
+ 
   return res.send(req.params);
-  // axios.post('https://api.paystack.co/transaction/initialize', params, config)
-  // .then(feedback => {
-  //   // console.log(`statusCode: ${res.statusCode}`)
-  //   console.log(feedback.data)
-  //   res.send("streets be cold")
-  // })
-  // .catch(error => {
-  //   console.log(error)
-  //   res.send("error")
-  // })
+ 
 })
 
 app.post('/callback', (req, res) => {
@@ -51,7 +84,7 @@ app.post('/callback', (req, res) => {
 
 app.get('/trigger/:busId', async function (req, res) {
   var trigger = await triggerdb.doc(req.params.busId).get();
-   //console.log(trigger.data()["trigger"]);
+  
   
   return res.send(trigger.data()["trigger"]);
 })
