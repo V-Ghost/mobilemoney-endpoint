@@ -92,10 +92,14 @@ app.get('/employee/:username/password/:password', (req, res) => {
      email: req.params.username+'@shuttler.com',
     password: req.params.password
   })
-  .then((userRecord) => {
+  .then(async function(userRecord) {
 
     // See the UserRecord reference doc for the contents of userRecord.
     console.log('Successfully created new user:', userRecord.uid);
+    await db.collection("employees").doc(userRecord.uid).set({
+     "name": req.params.username
+    });
+
     return res.sendStatus(200);
   })
   .catch((error) => {
