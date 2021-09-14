@@ -96,7 +96,7 @@ app.get('/employee/:username/password/:password', (req, res) => {
 
     // See the UserRecord reference doc for the contents of userRecord.
     console.log('Successfully created new user:', userRecord.uid);
-    return res.send("OK");
+    return res.sendStatus(200);
   })
   .catch((error) => {
    
