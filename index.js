@@ -93,13 +93,17 @@ app.get('/employee/:username/password/:password', (req, res) => {
     password: req.params.password
   })
   .then((userRecord) => {
+
     // See the UserRecord reference doc for the contents of userRecord.
     console.log('Successfully created new user:', userRecord.uid);
+    return res.send("OK");
   })
   .catch((error) => {
+   
     console.log('Error creating new user:', error);
+    return res.send(error.message)
   });
-  return res.sendStatus(200)
+ 
 })
 
 app.get('/trigger/:busId', async function (req, res) {
