@@ -89,7 +89,7 @@ app.get('/employee/:username/password/:password', (req, res) => {
   console.log(req.params.username)
   defaultAuth
   .createUser({
-     email: req.params.username+'@shuttler.com',
+     email: req.params.username+'@rfftgyhj.com',
     password: req.params.password
   })
   .then(async function(userRecord) {
