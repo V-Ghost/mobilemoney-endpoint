@@ -23,16 +23,16 @@ let config = {
     'Content-Type': 'application/json'
   }
 }
-
-let params = JSON.stringify({
-  "email": "vukaniabryan@email.com",
-  "amount": "20000",
+var defaultAuth = fs.auth();
+// let params = JSON.stringify({
+//   "email": "vukaniabryan@email.com",
+//   "amount": "20000",
   
-})
+// })
 
 app.get('/tag/:tagId',async function  (req, res)  {
   var userId ;
-
+  
   var result = await db.collection("shuttleUsers").where('tagId', '==', req.params.tagId).get();
 
   if(result.docs.length > 0){
@@ -40,17 +40,15 @@ app.get('/tag/:tagId',async function  (req, res)  {
       print(element.id)
       userId = element.id;
     });
-    var bookedTrips = await db.collection("trips").where('status', '==', 'booked').where('user', '==', userId).get();
-    var ongoingTrips = await db.collection("trips").where('status', '==', 'ongoing').where('user', '==', userId).get();
+    var bookedTrips = await db.collection("shuttleUsers").doc(userId).collection("trips").where('status', '==', 'booked').get();
+    var ongoingTrips = await db.collection("shuttleUsers").doc(userId).collection("trips").where('status', '==', 'ongoing').get();
 
     var tripId ;
     if(bookedTrips.docs.length>0){
       bookedTrips.docs.forEach(element =>{
-        print("reach")
-        print(element.id);
       tripId = element.id;
       });
-      await db.collection("trips").doc(tripId).update({
+      await db.collection("shuttleUsers").doc(userId).collection("trips").doc(tripId).update({
         "status": 'ongoing',
       });
 
@@ -62,7 +60,7 @@ app.get('/tag/:tagId',async function  (req, res)  {
       ongoingTrips.docs.forEach(element =>{
       tripId = element.id;
       });
-      await db.collection("trips").doc(tripId).update({
+      await db.collection("shuttleUsers").doc(userId).collection("trips").doc(tripId).update({
         "status": 'expired',
       });
 
@@ -77,9 +75,27 @@ app.get('/tag/:tagId',async function  (req, res)  {
  
 })
 
-app.post('/callback', (req, res) => {
+app.get('/callback', (req, res) => {
   console.log(req.params)
-  return res.end()
+  return res.send("jioi")
+})
+
+
+app.get('/employee/:username/password/:password', (req, res) => {
+  console.log(req.params.username)
+  defaultAuth
+  .createUser({
+     email: req.params.username+'@shuttler.com',
+    password: req.params.password
+  })
+  .then((userRecord) => {
+    // See the UserRecord reference doc for the contents of userRecord.
+    console.log('Successfully created new user:', userRecord.uid);
+  })
+  .catch((error) => {
+    console.log('Error creating new user:', error);
+  });
+  return res.sendStatus(200)
 })
 
 app.get('/trigger/:busId', async function (req, res) {
