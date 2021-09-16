@@ -44,15 +44,16 @@ app.get('/tag/:tagId',async function  (req, res)  {
       print(element.id)
       userId = element.id;
     });
-    var bookedTrips = await db.collection("shuttleUsers").doc(userId).collection("trips").where('status', '==', 'booked').get();
-    var ongoingTrips = await db.collection("shuttleUsers").doc(userId).collection("trips").where('status', '==', 'ongoing').get();
-
+    var bookedTrips = await db.collection("trips").where('status', '==', 'booked').where('user','==',userId).get();
+    var ongoingTrips = await db.collection("trips").where('status', '==', 'ongoing').where('user','==',userId).get();
+  console.log(bookedTrips.empty)
     var tripId ;
     if(bookedTrips.docs.length>0){
+      
       bookedTrips.docs.forEach(element =>{
       tripId = element.id;
       });
-      await db.collection("shuttleUsers").doc(userId).collection("trips").doc(tripId).update({
+      await db.collection("trips").doc(tripId).update({
         "status": 'ongoing',
       });
 
@@ -64,7 +65,7 @@ app.get('/tag/:tagId',async function  (req, res)  {
       ongoingTrips.docs.forEach(element =>{
       tripId = element.id;
       });
-      await db.collection("shuttleUsers").doc(userId).collection("trips").doc(tripId).update({
+      await db.collection("trips").doc(tripId).update({
         "status": 'expired',
       });
 
