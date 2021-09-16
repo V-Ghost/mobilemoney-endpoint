@@ -4,7 +4,7 @@ var express = require('express');
 var app = express();
 var port = 3000;
 var fs = require("firebase-admin");
-
+const path = require('path');
 
 
 const serviceAccount = require('./admin-key/shuttler-23bfb-1a6fc3c068f5.json');
@@ -83,6 +83,11 @@ app.get('/tag/:tagId',async function  (req, res)  {
 app.get('/callback', (req, res) => {
   console.log(req.params)
   return res.send("jioi")
+})
+
+app.get('/momo', (req, res) => {
+  console.log(__dirname);
+ return res.sendFile(path.join(__dirname, '/index.html'));
 })
 
 

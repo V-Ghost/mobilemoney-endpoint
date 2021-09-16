@@ -1,0 +1,113 @@
+<!-- <form id="paymentForm">
+    <div class="container-fluid py-4">
+    <div class="row">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="mb-3">
+        <input type="email" id="email-address" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="amount">Amount</label>
+        <div class="mb-3">
+        <input type="tel" id="amount" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="first-name">First Name</label>
+        <div class="mb-3">
+        <input type="text" id="first-name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <div class="mb-3">
+        <input type="text" id="last-name" />
+        </div>
+      </div>
+      <div class="form-submit">
+      <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <button type="button" onclick="payWithPaystack()"> Pay </button>
+        <div>
+      </div>
+      </div>
+      </div>
+     
+    </form> -->
+
+
+    
+    
+
+   
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <title>Payment Form</title>
+  </head>
+  <body style=" width:50%;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top: 50px;
+  ">
+      <form id="paymentForm">
+          <div class="form-group">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input id="email-address"  type="email" class="form-control"  aria-describedby="emailHelp" required>
+                <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+              </div>
+          </div>
+          <div class="form-group">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Amount</label>
+                <input  class="form-control" type="tel" id="amount" required aria-describedby="emailHelp">
+                <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+              </div>
+        </div>
+        
+         
+          <button  type="button" onclick="payWithPaystack()" class="btn btn-primary">Submit</button>
+          <script src="https://js.paystack.co/v1/inline.js"></script> 
+      </form>
+   
+    <!-- Optional JavaScript; choose one of the two! -->
+    <script>
+        function payWithPaystack() {
+    
+          let handler = PaystackPop.setup({
+            key: 'pk_live_e1126dcd84114c58576ec608056d74f953b7d8f5', // Replace with your public key
+            email: document.getElementById("email-address").value,
+            amount: document.getElementById("amount").value * 100,
+            currency: 'GHS',
+            // label: "Optional string that replaces customer email"
+            onClose: function(){
+              alert('Window closed.');
+            },
+            callback: function(response){
+              alert('success. transaction ref is ' + response.reference);
+            }
+          });
+          handler.openIframe();
+        }
+    
+        </script>
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>
