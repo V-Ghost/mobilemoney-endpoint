@@ -5,6 +5,7 @@ var app = express();
 var port = 3000;
 var fs = require("firebase-admin");
 const path = require('path');
+const crypto = require("crypto");
 
 
 const serviceAccount = require('./admin-key/shuttler-23bfb-1a6fc3c068f5.json');
@@ -80,13 +81,30 @@ app.get('/tag/:tagId',async function  (req, res)  {
  
 })
 
-app.get('/callback', (req, res) => {
-  console.log(req.params)
+app.get('/callback/:id', async function (req, res)  {
+  var id;
+  var result  = await db.collection("shuttleUsers").where('indexNo', '==', req.params.id).get();
+  //const unique = crypto.randomBytes(16).toString("hex");
+
+  result.docs.forEach((element) =>{
+    console.log(element.id);
+    id = element.id
+   console.log(id)
+  });
+  var data =await  db.collection("trips").where('user', '==', id).where('status', '==', "pending").get();
+  data.docs.forEach(async function(element) {
+    await db.collection("trips").doc(element.id).update({
+      "status": "booked"
+    }).catch((error)=>{
+      console.log(error)
+    })
+  });
+ 
   return res.send("jioi")
 })
 
 app.get('/momo', (req, res) => {
-  console.log(__dirname);
+  // console.log(__dirname);
  return res.sendFile(path.join(__dirname, '/index.html'));
 })
 

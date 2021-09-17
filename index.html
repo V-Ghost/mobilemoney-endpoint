@@ -34,54 +34,64 @@
       </div>
      
     </form> -->
-
-
-    
-    
-
-   
-
-
 <!doctype html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous">
 
     <title>Payment Form</title>
   </head>
-  <body style=" width:50%;
-  margin-left:auto;
-  margin-right:auto;
-  margin-top: 50px;
-  ">
-      <form id="paymentForm">
-          <div class="form-group">
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input id="email-address"  type="email" class="form-control"  aria-describedby="emailHelp" required>
-                <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
-              </div>
-          </div>
-          <div class="form-group">
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Amount</label>
-                <input  class="form-control" type="tel" id="amount" required aria-describedby="emailHelp">
-                <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
-              </div>
+  <body style="width:50%;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 50px;">
+    <form id="paymentForm">
+      <div class="form-group">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email
+            address</label>
+          <input id="email-address" type="email" class="form-control"
+            aria-describedby="emailHelp" required>
+          <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
         </div>
-        
-         
-          <button  type="button" onclick="payWithPaystack()" class="btn btn-primary">Submit</button>
-          <script src="https://js.paystack.co/v1/inline.js"></script> 
-      </form>
-   
+      </div>
+
+      <div class="form-group">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Index number</label>
+          <input id="index" class="form-control"
+            aria-describedby="Index" required>
+          <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Amount</label>
+          <input class="form-control" type="tel" id="amount" required
+            aria-describedby="emailHelp">
+          <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+        </div>
+      </div>
+
+
+      <button type="button" onclick="payWithPaystack()" class="btn
+        btn-primary">Submit</button>
+      <script src="https://js.paystack.co/v1/inline.js"></script>
+    </form>
+
     <!-- Optional JavaScript; choose one of the two! -->
     <script>
+
+        
+
         function payWithPaystack() {
     
           let handler = PaystackPop.setup({
@@ -94,6 +104,11 @@
               alert('Window closed.');
             },
             callback: function(response){
+                var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", `https://rocky-journey-47885.herokuapp.com/callback/${getElementById("index").value}`, false ); // false for synchronous request
+    xmlHttp.send( null );
+    console.log(xmlHttp.responseText)
+   xmlHttp.responseText;
               alert('success. transaction ref is ' + response.reference);
             }
           });
@@ -102,7 +117,10 @@
     
         </script>
     <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+      crossorigin="anonymous"></script>
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--
